@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,20 @@ import {
   View,
 } from 'react-native';
 import {colors, spacing} from '../utils/styles';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import * as photosActions from '../store/photos';
 
-type Props = {
-  buttonClickHandler: (query: string) => void;
-};
+export const Form = () => {
+  const dispatch = useAppDispatch();
+  const {query, page, perPage} = useAppSelector(state => state.photos);
 
-export const Form: React.FC<Props> = ({buttonClickHandler}) => {
-  const [query, setQuery] = useState('');
+  const buttonClickHandler = () => {
+    if (query.length >= 3) {
+      dispatch(photosActions.getSearch({query, page, perPage}));
+    } else {
+      dispatch(photosActions.setQuery(''));
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -21,14 +28,10 @@ export const Form: React.FC<Props> = ({buttonClickHandler}) => {
         style={styles.input}
         placeholder="Type..."
         value={query}
-        onChangeText={setQuery}
+        onChangeText={event => dispatch(photosActions.setQuery(event))}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          buttonClickHandler(query);
-        }}>
+      <TouchableOpacity style={styles.button} onPress={buttonClickHandler}>
         <Text style={styles.buttonText}>Search</Text>
       </TouchableOpacity>
     </View>

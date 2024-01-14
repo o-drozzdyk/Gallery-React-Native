@@ -10,9 +10,11 @@ type Props = {
 };
 
 export const PhotoItem: React.FC<Props> = ({photo}) => {
-  const {id, title, author, width, height} = photo;
-
   const [url, setUrl] = useState('');
+  const {id, title, author, width, height} = photo;
+  console.log('photoItem photo:', photo);
+
+  // const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export const PhotoItem: React.FC<Props> = ({photo}) => {
     };
 
     getPhotoUrl();
-  }, [id]);
+  }, []);
 
   return (
     <TouchableOpacity

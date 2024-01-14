@@ -1,33 +1,28 @@
 import React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {PhotoItem} from './PhotoItem';
+import {useAppSelector} from '../store/hooks';
 
-interface Photo {
-  id: string;
-  title: string | null;
-  author: string;
-  width: number;
-  height: number;
-}
+export const PhotoList = () => {
+  const {photos} = useAppSelector(state => state.photos);
 
-type Props = {
-  photos: Photo[];
-};
-
-export const PhotoList: React.FC<Props> = ({photos}) => {
   return (
-    <FlatList
-      data={photos}
-      renderItem={({item: photo}) => <PhotoItem photo={photo} />}
-      keyExtractor={photo => photo.id}
-      numColumns={2}
-      columnWrapperStyle={styles.columnWrapper}
-      key={1}
-    />
+    <View style={styles.container}>
+      {photos.map(photo => (
+        <PhotoItem photo={photo} key={photo.id} />
+      ))}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
   columnWrapper: {
     justifyContent: 'space-between',
     alignItems: 'center',

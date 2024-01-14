@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {
   Keyboard,
   ScrollView,
@@ -11,78 +11,42 @@ import {
 import {Form} from '../components/Form';
 import {PhotoList} from '../components/PhotoList';
 import {Pagination} from '../components/Pagination';
-import {Photo} from '../types/Photo';
 import {colors, spacing} from '../utils/styles';
-
-const ACCESS_KEY = 'VtkyZclbIU7UrMrtQ3uSgnyrIX1rIwYXw6Io9ylC3jw';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import * as photosActions from '../store/photos';
 
 export const HomeScreen = () => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
-  const [totalPageNumber, setTotalPageNumber] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const {query, page, perPage, isLoading, error} = useAppSelector(
+    state => state.photos,
+  );
 
   useMemo(() => {
     if (query.length >= 3) {
-      setIsLoading(true);
-      setQuery(query);
-
-      fetch(
-        `https://api.unsplash.com/search/photos?client_id=${ACCESS_KEY}&page=${page}&query=${query}&per_page=${perPage}`,
-      )
-        .then(response => response.json())
-        .then(data => {
-          setPhotos(
-            data.results.map(
-              ({
-                description,
-                alt_description,
-                id,
-                user,
-                height,
-                width,
-              }: {
-                description: string;
-                alt_description: string;
-                id: string;
-                user: {name: string};
-                height: number;
-                width: number;
-              }) => {
-                const title = description ? description : alt_description;
-
-                return {
-                  id,
-                  title,
-                  author: user.name,
-                  width,
-                  height,
-                };
-              },
-            ),
-          );
-
-          setTotalPageNumber(data.total_pages);
-        })
-        .finally(() => setIsLoading(false));
+      dispatch(photosActions.getSearch({query, page, perPage}));
     } else {
-      setQuery('');
+      dispatch(photosActions.setQuery(''));
     }
-  }, [query, page, perPage]);
+  }, [query, dispatch, page, perPage]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView style={styles.body}>
         <View style={styles.container}>
-          <Form buttonClickHandler={input => setQuery(input)} />
+          <Form />
 
+          {query && isLoading && (
+            <View style={styles.loadingMessage}>
+              <Text style={[styles.loadingText, styles.text_color]}>
+                Loading...
+              </Text>
+            </View>
+          )}
           {query &&
-            (isLoading ? (
+            (error ? (
               <View style={styles.loadingMessage}>
                 <Text style={[styles.loadingText, styles.text_color]}>
-                  Loading...
+                  {error}
                 </Text>
               </View>
             ) : (
@@ -103,7 +67,7 @@ export const HomeScreen = () => {
                           styles.perPageButton,
                           perPage === num && styles.buttonActive,
                         ]}
-                        onPress={() => setPerPage(num)}
+                        onPress={() => dispatch(photosActions.setPerPage(num))}
                         key={num}>
                         <Text style={styles.buttonText}>{num}</Text>
                       </TouchableOpacity>
@@ -111,13 +75,9 @@ export const HomeScreen = () => {
                   </View>
                 </View>
 
-                <PhotoList photos={photos} />
+                <PhotoList />
 
-                <Pagination
-                  page={page}
-                  totalPageNumber={totalPageNumber}
-                  pageButtonHandler={newPage => setPage(newPage)}
-                />
+                <Pagination />
               </View>
             ))}
         </View>

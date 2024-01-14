@@ -1,27 +1,22 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {colors, spacing} from '../utils/styles';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
+import * as photosActions from '../store/photos';
 
-type Props = {
-  page: number;
-  totalPageNumber: number;
-  pageButtonHandler: (num: number) => void;
-};
+export const Pagination = () => {
+  const dispatch = useAppDispatch();
+  const {page, totalPageNumber} = useAppSelector(state => state.photos);
 
-export const Pagination: React.FC<Props> = ({
-  page,
-  totalPageNumber,
-  pageButtonHandler,
-}) => {
   const goToPrevPage = () => {
     if (page > 1) {
-      pageButtonHandler(page - 1);
+      dispatch(photosActions.setPage(page - 1));
     }
   };
 
   const goToNextPage = () => {
     if (page < totalPageNumber) {
-      pageButtonHandler(page + 1);
+      dispatch(photosActions.setPage(page + 1));
     }
   };
 
