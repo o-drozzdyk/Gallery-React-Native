@@ -44,16 +44,19 @@ Follow these steps to set up the Photo Gallery App locally:
    git clone https://github.com/o-drozzdyk/Gallery-React-Native
 
 2. Navigate to the project directory:
-  '''bash
+  ```bash
   cd photo-gallery-app
+  ```
 
 3. Install dependencies:
-  '''bash
+  ```bash
   npm install
+  ```
 
 4. Start the Metro Server:
-  '''bash
+  ```bash
   npm start
+  ```
 
 5. Start your Application
 
