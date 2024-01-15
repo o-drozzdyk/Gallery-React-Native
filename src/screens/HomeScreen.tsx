@@ -22,12 +22,8 @@ export const HomeScreen = () => {
   );
 
   useMemo(() => {
-    if (query.length >= 3) {
-      dispatch(photosActions.getSearch({query, page, perPage}));
-    } else {
-      dispatch(photosActions.setQuery(''));
-    }
-  }, [query, dispatch, page, perPage]);
+    dispatch(photosActions.getSearch({query, page, perPage}));
+  }, [dispatch, page, perPage]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -43,6 +39,7 @@ export const HomeScreen = () => {
             </View>
           )}
           {query &&
+            !isLoading &&
             (error ? (
               <View style={styles.loadingMessage}>
                 <Text style={[styles.loadingText, styles.text_color]}>

@@ -1,11 +1,9 @@
 import {configureStore} from '@reduxjs/toolkit';
 import photosReducer from './photos';
-import photoUrlReducer from './photoUrl';
 
 const store = configureStore({
   reducer: {
     photos: photosReducer,
-    photoUrl: photoUrlReducer,
   },
 });
 

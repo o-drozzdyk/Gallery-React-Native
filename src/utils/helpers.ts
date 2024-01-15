@@ -17,19 +17,3 @@ export const fetchSearch = async ({
     console.log('fetchSerach: data were not load');
   }
 };
-
-export const fetchPhotoUrl = async (id: string) => {
-  try {
-    const response = await fetch(
-      `https://api.unsplash.com/photos/${id}?client_id=${ACCESS_KEY}`,
-    );
-
-    if (!response.ok) {
-      throw new Error("Couldn't load a photo");
-    }
-
-    return await response.json();
-  } catch {
-    console.log("Couldn't load a photo");
-  }
-};

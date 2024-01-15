@@ -12,9 +12,7 @@ type Props = {
 export const PhotoItem: React.FC<Props> = ({photo}) => {
   const [url, setUrl] = useState('');
   const {id, title, author, width, height} = photo;
-  console.log('photoItem photo:', photo);
 
-  // const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -57,6 +55,7 @@ export const PhotoItem: React.FC<Props> = ({photo}) => {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    marginBottom: 10,
     width: 170,
     borderWidth: 1,
     borderRadius: 5,
