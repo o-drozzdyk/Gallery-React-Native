@@ -21,7 +21,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 // Встановлюємо флаг __DEV__ в false для режиму виробництва
 if (isProduction) {
-  console.log = () => {}; // Перевизначення console.log на порожню функцію
+  console.log = () => {};
 }
 
 const ReduxApp = () => (

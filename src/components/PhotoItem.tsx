@@ -29,7 +29,6 @@ export const PhotoItem: React.FC<Props> = ({photo}) => {
         })
         .then(data => {
           setUrl(data.urls.full);
-          console.log(data.urls.full);
         });
     };
 

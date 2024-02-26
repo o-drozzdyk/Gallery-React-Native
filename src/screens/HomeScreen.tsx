@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {
   Keyboard,
   ScrollView,
@@ -10,20 +10,35 @@ import {
 } from 'react-native';
 import {Form} from '../components/Form';
 import {PhotoList} from '../components/PhotoList';
-import {Pagination} from '../components/Pagination';
 import {colors, spacing} from '../utils/styles';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
 import * as photosActions from '../store/photos';
 
 export const HomeScreen = () => {
   const dispatch = useAppDispatch();
-  const {query, page, perPage, isLoading, error} = useAppSelector(
-    state => state.photos,
-  );
+  const {query, page, isLoading, error} = useAppSelector(state => state.photos);
+
+  useEffect(() => {
+    dispatch(photosActions.initialSearch(1));
+  }, []);
 
   useMemo(() => {
-    dispatch(photosActions.getSearch({query, page, perPage}));
-  }, [dispatch, page, perPage]);
+    dispatch(photosActions.getSearch({query, page: 1, isNewQuery: true}));
+  }, [dispatch, query]);
+
+  const showMore = () => {
+    const nextPage = page + 1;
+
+    dispatch(photosActions.setPage(nextPage));
+
+    if (query.length > 0) {
+      dispatch(
+        photosActions.getSearch({query, page: nextPage, isNewQuery: false}),
+      );
+    } else {
+      dispatch(photosActions.initialSearch(nextPage));
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -31,52 +46,29 @@ export const HomeScreen = () => {
         <View style={styles.container}>
           <Form />
 
-          {query && isLoading && (
+          {isLoading ? (
             <View style={styles.loadingMessage}>
               <Text style={[styles.loadingText, styles.text_color]}>
                 Loading...
               </Text>
             </View>
+          ) : (
+            <View style={styles.content}>
+              <PhotoList />
+
+              <TouchableOpacity style={styles.button} onPress={showMore}>
+                <Text style={styles.buttonText}>More</Text>
+              </TouchableOpacity>
+            </View>
           )}
-          {query &&
-            !isLoading &&
-            (error ? (
-              <View style={styles.loadingMessage}>
-                <Text style={[styles.loadingText, styles.text_color]}>
-                  {error}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.content}>
-                <Text style={[styles.text_info, styles.text_color]}>
-                  {`Search results for "${query}":`}
-                </Text>
 
-                <View style={styles.perPageContainer}>
-                  <Text style={[styles.perPageTitle, styles.text_color]}>
-                    Items on page:
-                  </Text>
-
-                  <View style={styles.buttonsContainer}>
-                    {[4, 10, 16].map(num => (
-                      <TouchableOpacity
-                        style={[
-                          styles.perPageButton,
-                          perPage === num && styles.buttonActive,
-                        ]}
-                        onPress={() => dispatch(photosActions.setPerPage(num))}
-                        key={num}>
-                        <Text style={styles.buttonText}>{num}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <PhotoList />
-
-                <Pagination />
-              </View>
-            ))}
+          {error && (
+            <View style={styles.loadingMessage}>
+              <Text style={[styles.loadingText, styles.text_color]}>
+                {error}
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </TouchableWithoutFeedback>
@@ -117,36 +109,17 @@ const styles = StyleSheet.create({
     fontSize: spacing.large,
   },
 
-  perPageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  perPageTitle: {
-    fontSize: spacing.medium,
-  },
-
-  buttonsContainer: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-
-  perPageButton: {
-    width: 40,
+  button: {
     height: 40,
+    borderRadius: 5,
     backgroundColor: colors.button,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
-  },
-
-  buttonActive: {
-    borderWidth: 1,
-    borderColor: colors.header,
+    alignSelf: 'center',
   },
 
   buttonText: {
+    paddingHorizontal: 16,
     fontSize: spacing.medium,
     fontWeight: 'bold',
     color: colors.buttonText,

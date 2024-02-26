@@ -12,11 +12,11 @@ import * as photosActions from '../store/photos';
 
 export const Form = () => {
   const dispatch = useAppDispatch();
-  const {query, page, perPage} = useAppSelector(state => state.photos);
+  const {query, page} = useAppSelector(state => state.photos);
 
   const buttonClickHandler = () => {
     if (query.length >= 3) {
-      dispatch(photosActions.getSearch({query, page, perPage}));
+      dispatch(photosActions.getSearch({query, page, isNewQuery: true}));
     } else {
       dispatch(photosActions.setQuery(''));
     }
