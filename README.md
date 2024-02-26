@@ -4,7 +4,7 @@ This project is a modern web and mobile application for viewing and managing pho
 
 ## Demo
 
-Explore the live demo to experience the Unsplash Photo Gallery App: [Photo Gallery Demo](https://drive.google.com/file/d/1zh3r73EPqp62poMqnsSlrqMvZqeksOIA/view)
+Explore the live demo to experience the Unsplash Photo Gallery App: [Photo Gallery Demo](https://drive.google.com/file/d/1Cxi0ID6HMGxfGXeUUl8QB7XY3mKt785k/view)
 
 ## Technologies
 
