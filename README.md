@@ -1,10 +1,10 @@
-# Project: Unsplash Photo Gallery App
+# Unsplash Photo Gallery App
 
 This project is a modern web and mobile application for viewing and managing photo collections from Unsplash. Below, you'll find information on how to access the live demo, the technologies used, and the various features available.
 
 ## Demo
 
-Explore the live demo to experience the Unsplash Photo Gallery App: [Photo Gallery Demo](https://drive.google.com/file/d/1a65bpw5BxQF2kYaczGgKq1vpGAv7i3Av/view?usp=drive_link)
+Explore the live demo to experience the Unsplash Photo Gallery App: [Photo Gallery Demo](https://drive.google.com/file/d/1zh3r73EPqp62poMqnsSlrqMvZqeksOIA/view)
 
 ## Technologies
 
@@ -19,17 +19,17 @@ The Photo Gallery App is built using the following technologies:
 
 ## Functionalities
 
-### 1. Photo Search
+### 1. View Random Photos
+
+On the first app load it shows a collection of the newest photos and updates each time new photo is added.
+
+### 2. Photo Search
 
 Effortlessly search for specific photos using the built-in search functionality.
 
-### 2. Page Navigation
+### 3. Viewing more photos
 
-Browse through the photo collection seamlessly with the intuitive page navigation system.
-
-### 3. Items per Page
-
-Customize your viewing experience by adjusting the number of items displayed per page, catering to your preferences.
+Viewing more photos on 'More' button click.
 
 ### 4. Individual Photo View
 
